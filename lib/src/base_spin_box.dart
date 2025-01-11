@@ -136,17 +136,22 @@ mixin SpinBoxMixin<T extends BaseSpinBox> on State<T> {
 
     if (v > widget.max) {
       // Gọi callback hoặc xử lý nếu giá trị vượt quá max
+      print("widget.max");
       widget.onInvalidValue?.call(v, 'Giá trị vượt quá giới hạn tối đa (${widget.max})');
       return; // Không thay đổi giá trị
     }
 
     if (v < widget.min) {
       // Gọi callback hoặc xử lý nếu giá trị nhỏ hơn min
+      print("widget.min");
       widget.onInvalidValue?.call(v, 'Giá trị nhỏ hơn giới hạn tối thiểu (${widget.min})');
       return; // Không thay đổi giá trị
     }
 
-    if (newValue == value) return; // Không thực hiện thay đổi nếu giá trị không đổi
+    if (newValue == value) {
+      print("newValue ");
+      return; // Không thực hiện thay đổi nếu giá trị không đổi
+    }
 
     if (widget.canChange?.call(newValue) == false) return; // Kiểm tra điều kiện thay đổi giá trị
 

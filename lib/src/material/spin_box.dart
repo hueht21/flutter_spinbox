@@ -87,6 +87,7 @@ class SpinBox extends BaseSpinBox {
     this.beforeChange,
     this.afterChange,
     this.focusNode,
+    this.onInvalidValue,
   })  : assert(min <= max),
         keyboardType = keyboardType ??
             TextInputType.numberWithOptions(
@@ -274,6 +275,9 @@ class SpinBox extends BaseSpinBox {
 
   @override
   State<SpinBox> createState() => SpinBoxState();
+
+  @override
+  final void Function(double invalidValue, String message)? onInvalidValue;
 }
 
 class SpinBoxState extends State<SpinBox> with SpinBoxMixin {

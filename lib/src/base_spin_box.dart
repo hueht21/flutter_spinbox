@@ -44,6 +44,7 @@ abstract class BaseSpinBox extends StatefulWidget {
   VoidCallback? get afterChange;
   bool get readOnly;
   FocusNode? get focusNode;
+  void Function(double, String)? get onInvalidValue;
 }
 
 mixin SpinBoxMixin<T extends BaseSpinBox> on State<T> {
@@ -121,15 +122,37 @@ mixin SpinBoxMixin<T extends BaseSpinBox> on State<T> {
   }
 
   void setValue(double v) {
+    // final newValue = v.clamp(widget.min, widget.max);
+    // if (newValue == value) return;
+    //
+    // if (widget.canChange?.call(newValue) == false) return;
+    //
+    // widget.beforeChange?.call();
+    // setState(() => _updateController(value, newValue));
+    // widget.onSubmitted?.call(double.parse(_formatText(newValue)));
+    // widget.afterChange?.call();
+
     final newValue = v.clamp(widget.min, widget.max);
-    if (newValue == value) return;
 
-    if (widget.canChange?.call(newValue) == false) return;
+    if (v > widget.max) {
+      // Gọi callback hoặc xử lý nếu giá trị vượt quá max
+      widget.onInvalidValue?.call(v, 'Giá trị vượt quá giới hạn tối đa (${widget.max})');
+      return; // Không thay đổi giá trị
+    }
 
-    widget.beforeChange?.call();
-    setState(() => _updateController(value, newValue));
-    widget.onSubmitted?.call(double.parse(_formatText(newValue)));
-    widget.afterChange?.call();
+    if (v < widget.min) {
+      // Gọi callback hoặc xử lý nếu giá trị nhỏ hơn min
+      widget.onInvalidValue?.call(v, 'Giá trị nhỏ hơn giới hạn tối thiểu (${widget.min})');
+      return; // Không thay đổi giá trị
+    }
+
+    if (newValue == value) return; // Không thực hiện thay đổi nếu giá trị không đổi
+
+    if (widget.canChange?.call(newValue) == false) return; // Kiểm tra điều kiện thay đổi giá trị
+
+    widget.beforeChange?.call(); // Gọi callback trước khi thay đổi
+    setState(() => _updateController(value, newValue)); // Cập nhật giá trị
+    widget.afterChange?.call(); // Gọi callback sau khi thay đổi
   }
 
   void _updateController(double oldValue, double newValue) {

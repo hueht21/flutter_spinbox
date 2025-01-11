@@ -85,6 +85,7 @@ class CupertinoSpinBox extends BaseSpinBox {
     this.beforeChange,
     this.afterChange,
     this.focusNode,
+    this.onInvalidValue,
   })  : assert(min <= max),
         keyboardType = keyboardType ??
             TextInputType.numberWithOptions(
@@ -263,6 +264,9 @@ class CupertinoSpinBox extends BaseSpinBox {
   /// Value is formatted.
   @override
   final void Function(double)? onSubmitted;
+
+  @override
+  final void Function(double invalidValue, String message)? onInvalidValue;
 
   @override
   State<CupertinoSpinBox> createState() => CupertinoSpinBoxState();

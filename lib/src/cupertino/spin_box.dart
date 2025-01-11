@@ -331,7 +331,7 @@ class CupertinoSpinBoxState extends State<CupertinoSpinBox> with SpinBoxMixin {
     final incrementButton = CupertinoSpinButton(
       step: widget.step,
       icon: widget.incrementIcon,
-      enabled: widget.enabled && value < widget.max,
+      enabled: widget.enabled && value <= widget.max,
       interval: widget.interval,
       acceleration: widget.acceleration,
       onStep: (step) => setValue(value + step),

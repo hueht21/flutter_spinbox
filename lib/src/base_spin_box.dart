@@ -132,7 +132,7 @@ mixin SpinBoxMixin<T extends BaseSpinBox> on State<T> {
     // widget.onSubmitted?.call(double.parse(_formatText(newValue)));
     // widget.afterChange?.call();
 
-    print("setValue ");
+    print("setValue $v");
     final newValue = v.clamp(widget.min, widget.max);
 
     if (v > widget.max) {

@@ -31,19 +31,33 @@ abstract class BaseSpinBox extends StatefulWidget {
   const BaseSpinBox({Key? key}) : super(key: key);
 
   double get min;
+
   double get max;
+
   double get step;
+
   double? get pageStep;
+
   double get value;
+
   int get decimals;
+
   int get digits;
+
   void Function(double)? get onSubmitted;
+
   ValueChanged<double>? get onChanged;
+
   bool Function(double value)? get canChange;
+
   VoidCallback? get beforeChange;
+
   VoidCallback? get afterChange;
+
   bool get readOnly;
+
   FocusNode? get focusNode;
+
   void Function(double, String)? get onInvalidValue;
 }
 
@@ -54,13 +68,18 @@ mixin SpinBoxMixin<T extends BaseSpinBox> on State<T> {
   late final TextEditingController _controller;
 
   double get value => _value;
+
   bool get hasFocus => _focusNode.hasFocus;
+
   FocusNode get focusNode => _focusNode;
+
   TextEditingController get controller => _controller;
+
   SpinFormatter get formatter => SpinFormatter(
       min: widget.min, max: widget.max, decimals: widget.decimals);
 
   static double _parseValue(String text) => double.tryParse(text) ?? 0;
+
   String _formatText(double value) {
     return value.toStringAsFixed(widget.decimals).padLeft(widget.digits, '0');
   }
@@ -100,9 +119,11 @@ mixin SpinBoxMixin<T extends BaseSpinBox> on State<T> {
   }
 
   void _stepUp() => setValue(value + widget.step);
+
   void _stepDown() => setValue(value - widget.step);
 
   void _pageStepUp() => setValue(value + widget.pageStep!);
+
   void _pageStepDown() => setValue(value - widget.pageStep!);
 
   void _updateValue() {
@@ -132,25 +153,23 @@ mixin SpinBoxMixin<T extends BaseSpinBox> on State<T> {
     // widget.onSubmitted?.call(double.parse(_formatText(newValue)));
     // widget.afterChange?.call();
 
-    print("setValue $v");
     final newValue = v.clamp(widget.min, widget.max);
 
     if (v > widget.max) {
       // Gọi callback hoặc xử lý nếu giá trị vượt quá max
-      print("widget.max");
-      widget.onInvalidValue?.call(v, 'Giá trị vượt quá giới hạn tối đa (${widget.max})');
+      widget.onInvalidValue
+          ?.call(v, 'Giá trị vượt quá giới hạn tối đa (${widget.max})');
       return; // Không thay đổi giá trị
     }
 
     if (v < widget.min) {
       // Gọi callback hoặc xử lý nếu giá trị nhỏ hơn min
-      print("widget.min");
-      widget.onInvalidValue?.call(v, 'Giá trị nhỏ hơn giới hạn tối thiểu (${widget.min})');
+      widget.onInvalidValue
+          ?.call(v, 'Giá trị nhỏ hơn giới hạn tối thiểu (${widget.min})');
       return; // Không thay đổi giá trị
     }
 
     if (newValue == value) {
-      print("newValue ");
       return; // Không thực hiện thay đổi nếu giá trị không đổi
     }
 
